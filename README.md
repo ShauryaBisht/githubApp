@@ -1,6 +1,12 @@
-# trial
+# githubApp
 
 > A GitHub App built with [Probot](https://github.com/probot/probot) that trial
+
+# Features
+- **Automated PR Size Labelling**
+- **Issue Validation**
+- **Role Based Assignment**
+- **YAML config:** The bot's behaviour can be customized via `.github/config.yml` file in the host repository.
 
 ## Setup
 
