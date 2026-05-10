@@ -89,4 +89,38 @@ export default (app: Probot) => {
       }),
     );
   });
+
+  app.on(["pull_request.opened","pull_request.synchronize"],async(context)=>{
+       const {data:commits}=await context.octokit.rest.pulls.listCommits(context.repo({
+            pull_number:context.payload.pull_request.number
+       }))
+       
+       const notverified=commits.filter(c=>!c.commit.verification?.verified)
+
+       const sha=context.payload.pull_request.head.sha
+
+       if(notverified.length>0){
+         await context.octokit.rest.issues.createComment(
+           context.issue({body:`Some commits are not signed`})
+         )
+
+         await context.octokit.rest.repos.createCommitStatus(
+          context.repo({
+            sha:sha,
+            state:"failure",
+            context:"GPG verification",
+            description:"verification failed"
+          })
+         )
+       }else{
+         await context.octokit.rest.repos.createCommitStatus(
+          context.repo({
+             sha:sha,
+             state:"success",
+             context:"GPG verification",
+             description:"verification successful"
+          })
+         )
+       }
+  })
 };
