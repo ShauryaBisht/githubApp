@@ -123,4 +123,47 @@ export default (app: Probot) => {
          )
        }
   })
+
+  app.on("issue_comment.created",async(context)=>{
+      
+    const config:any=await context.config("config.yml")
+    const staleThreshold=config?.issues?.stale_threshold
+    const threshold=staleThreshold*24*60*60*1000
+    const now=Date.now()
+
+    const {data:issues}=await context.octokit.rest.issues.listForRepo(
+      context.repo({
+        state:"open"
+      })
+    )
+    for(const issue of issues){
+      if(issue.pull_request) continue
+      
+      const lastUpdated=new Date(issue.updated_at).getTime()
+      const inactive=now-lastUpdated
+      if(inactive>threshold){
+        const isAlreadyStale=issue.labels.some(label=>{
+          const name=typeof label==="string"?label:label.name
+            return name=== "stale"
+        })
+
+        if(!isAlreadyStale){
+              await context.octokit.rest.issues.createComment(
+                 context.issue({
+                    issue_number:issue.number,
+                    body:`This issue is inactive for over ${staleThreshold} days. It is being marked as stale`
+                 })
+              )
+              await context.octokit.rest.issues.addLabels(
+                context.issue({
+                   issue_number:issue.number,
+                   labels:["stale"]
+                })
+              )
+        }
+      }
+         
+    }
+  })
+
 };
