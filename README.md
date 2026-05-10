@@ -8,6 +8,24 @@
 - **Role Based Assignment**
 - **YAML config:** The bot's behaviour can be customized via `.github/config.yml` file in the host repository.
 
+# Configuration
+To customize the bot, create a .github/config.yml file in your repository:
+
+YAML
+# Configuration for Hiero Bot
+issues:
+  min_body_length: 50
+  needs_info_label: "needs-more-info"
+
+pull_requests:
+  thresholds:
+    medium: 100
+    large: 500
+
+assignment:
+  min_role: "CONTRIBUTOR"
+
+
 ## Setup
 
 ```sh
