@@ -12,11 +12,12 @@
 To customize the bot's behavior, create a `.github/config.yml` file in your repository with the following structure:
 
 ```yaml
-# Configuration for Bot
+# Configuration for Hiero Automation Bot
+
 issues:
   min_body_length: 50
   needs_info_label: "needs-more-info"
-  stale_threshold: 1   #Number of days
+  stale_threshold: 1   # Number of days before marking as stale
 
 pull_requests:
   thresholds:
