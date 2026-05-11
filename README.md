@@ -12,7 +12,7 @@
 To customize the bot's behavior, create a `.github/config.yml` file in your repository with the following structure:
 
 ```yaml
-# Configuration for Hiero Automation Bot
+# Configuration for Github Automation Bot
 
 issues:
   min_body_length: 50
