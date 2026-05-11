@@ -16,6 +16,7 @@ To customize the bot's behavior, create a `.github/config.yml` file in your repo
 issues:
   min_body_length: 50
   needs_info_label: "needs-more-info"
+  stale_threshold: 1   #Number of days
 
 pull_requests:
   thresholds:
